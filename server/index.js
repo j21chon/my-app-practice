@@ -5,11 +5,31 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
-
+import postRoutes from './routes/posts.js'
 
 const app = express();
-app.use(cors)
 
+app.use('/posts', postRoutes);
 
+app.use(express.json({ limit: "30mb", extended: true })) // body-parser 대신 express 내장 사용하면 됨 / 사진을 보내는데 그 용량을 제한한 것
+app.use(express.urlencoded({ limit: "30mb", extended: true }))
+app.use(cors());
+// app.use(
+//     cors({
+//         origin: ['http://localhost:3000'],
+//         methods: ['GET, POST, OPTIONS, PUT, PATCH, DELETE'],
+//         credentials: true
+//     })
+// )
 
-app.use(express.json()) // body-parser 대신 express 내장 사용하면 됨
+const CONNECTION_URL = 'mongodb+srv://fallinM:fallinM123@sandbox.exnqu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const PORT = process.env.PORT || 5000;
+
+mongoose.connect(CONNECTION_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => app.listen(PORT, () => console.log(`server running on port: ${PORT}`)))
+.catch((error) => console.log(error.message))
+
+mongoose.set('useFindAndModify', false);
