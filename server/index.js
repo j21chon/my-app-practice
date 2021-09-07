@@ -9,8 +9,6 @@ import postRoutes from './routes/posts.js'
 
 const app = express();
 
-
-
 app.use(express.json({ limit: "30mb", extended: true })) // body-parser 대신 express 내장 사용하면 됨 / 사진을 보내는데 그 용량을 제한한 것
 app.use(express.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors());
@@ -24,7 +22,10 @@ app.use(cors());
 
 app.use('/posts', postRoutes);
 
+// mongoose를 통해 mongodb와 서버를 연결
+
 const CONNECTION_URL = 'mongodb+srv://fallinM:fallinM123@sandbox.exnqu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+// mondgodb 아틀라스에서 db를 생성한 후 db 주소를 생성해야 함 (클러스터)
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(CONNECTION_URL, {
